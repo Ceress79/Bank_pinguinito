@@ -1,0 +1,308 @@
+/* RESET BÁSICO */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background: #f5f7fa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER SUPERIOR */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #520017;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1001;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.menu-toggle {
+  font-size: 28px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 700;
+  font-size: 1.5rem;
+  user-select: none;
+  letter-spacing: 2px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.header-buttons a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  border: 2px solid white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header-buttons a:hover {
+  background-color: white;
+  color: #004085;
+}
+
+/* MENÚ LATERAL */
+nav.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100vh;
+  background-color: #520017;
+  color: white;
+  padding: 60px 20px 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+nav.sidebar.active {
+  left: 0;
+}
+
+nav.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 10px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  user-select: none;
+}
+
+nav.sidebar a:hover {
+  background-color: #0056b3;
+}
+
+/* FONDO OSCURO (overlay menú) */
+.overlay-menu {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 60px);
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 999;
+}
+
+.overlay-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* CONTENEDOR PRINCIPAL - FORMULARIO Y TABLA LADO A LADO */
+main.cuentas-container {
+  margin-top: 100px; /* Para que no tape el header fijo */
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 80px;
+  flex-wrap: wrap; /* adaptable a pantallas pequeñas */
+  width: 100%;
+}
+
+/* Saludo */
+main.cuentas-container h1.bienvenida {
+  width: 100%;
+  text-align: center;
+  font-size: 2.2rem;
+  color: #520017;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+/* FORMULARIO CREAR CUENTA */
+.form-crear-cuenta {
+  flex: 1 1 350px;
+  max-width: 600px;
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-crear-cuenta h2 {
+  margin-bottom: 15px;
+  text-align: center;
+  color: #520017;
+}
+
+.form-crear-cuenta input,
+.form-crear-cuenta button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-crear-cuenta button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.form-crear-cuenta button:hover {
+  background-color: #0056b3;
+}
+
+/* TABLA DE CUENTAS */
+.tabla-cuentas {
+  flex: 1 1 600px;
+  max-width: 780px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  /* eliminamos overflow-x para evitar scroll horizontal */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  /* Forzar que el contenido no exceda el ancho */
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.tabla-cuentas h2 {
+  margin-bottom: 15px;
+  text-align: center;
+  color: #520017;
+}
+
+.tabla-cuentas table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  table-layout: fixed; /* Importante para que las columnas no se expandan y eviten scroll */
+}
+
+.tabla-cuentas th,
+.tabla-cuentas td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  word-break: break-word; /* para evitar overflow en celdas */
+}
+
+.tabla-cuentas th {
+  background-color: #6c0000;
+  color: white;
+}
+
+.tabla-cuentas td {
+  background-color: #f9f9f9;
+}
+
+.tabla-cuentas a {
+  color: #131212;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.tabla-cuentas a:hover {
+  text-decoration: underline;
+}
+
+/* Contenedor de botones dentro de la celda */
+.tabla-cuentas td.acciones {
+  display: flex;
+  justify-content: center; /* centra horizontalmente los botones */
+  gap: 5px; /* espacio entre botones */
+}
+
+/* BOTONES DE ACCIÓN */
+.btn-editar, .btn-eliminar {
+  padding: 5px 12px;
+  border-radius: 6px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.btn-editar {
+  background-color: #28a745;
+}
+
+.btn-editar:hover {
+  background-color: #218838;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+}
+
+.btn-eliminar:hover {
+  background-color: #c82333;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .header-buttons a {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
+
+  main.cuentas-container {
+    flex-direction: column;
+    margin-top: 80px;
+  }
+
+  main.cuentas-container h1.bienvenida {
+    font-size: 1.8rem;
+  }
+
+  .form-crear-cuenta,
+  .tabla-cuentas {
+    max-width: 100%;
+    flex: none;
+  }
+}
+
+
+
+/* Hacer la columna "Operaciones" más ancha */
+.tabla-cuentas table th:last-child,
+.tabla-cuentas table td.acciones {
+  width: 190px; /* Puedes ajustar el valor */
+}

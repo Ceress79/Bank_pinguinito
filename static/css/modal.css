@@ -1,0 +1,71 @@
+/* Fondo del modal: oscuro semi-transparente */
+.modal {
+  display: none; /* Oculto por defecto */
+  position: fixed; /* Fijo en pantalla */
+  z-index: 1000; /* Sobre otros elementos */
+  left: 0;
+  top: 0;
+  width: 100%; /* Ancho completo */
+  height: 100%; /* Alto completo */
+  overflow: auto; /* Scroll si el contenido es grande */
+  background-color: rgba(0,0,0,0.5); /* Fondo oscuro semi-transparente */
+}
+
+/* Contenido del modal centrado */
+.modal-contenido {
+  background-color: #fefefe;
+  margin: 10% auto; /* Margen para centrar vertical y horizontal */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 500px; /* Ancho máximo */
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+/* Botón para cerrar modal (X) */
+.cerrar {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.cerrar:hover,
+.cerrar:focus {
+  color: #000;
+  text-decoration: none;
+}
+
+/* Estilos para inputs dentro del modal */
+.modal-contenido input[type="text"],
+.modal-contenido input[type="number"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin: 8px 0 16px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Botón de guardar cambios */
+.modal-contenido button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.modal-contenido button[type="submit"]:hover {
+  background-color: #0056b3;
+}
