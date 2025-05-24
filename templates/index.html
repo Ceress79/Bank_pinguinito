@@ -20,7 +20,7 @@
     <div class="logo">Pingui Banks</div>
 
     <div class="header-buttons">
-      <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
     </div>
   </header>
 
@@ -42,7 +42,7 @@
     <!-- Formulario para crear nueva cuenta -->
     <div class="form-crear-cuenta">
       <h2>Crear nueva cuenta bancaria</h2>
-      <form action="{{ url_for('crear_cuenta_bancaria') }}" method="POST">
+      <form action="{{ url_for('cuentas.crear_cuenta_bancaria') }}" method="POST">
         <input type="text" name="tipo_cuenta" placeholder="Cuenta corriente o ahorro" required>
         <input type="text" name="apodo" placeholder="Apodo de la cuenta" required>
         <input type="number" name="limite_retiro" placeholder="Dinero límite para retirar" required>
@@ -90,7 +90,7 @@
             >Editar</button>
 
 
-              <a class="btn-eliminar" href="{{ url_for('eliminar_cuenta', id=cuenta.id) }}" onclick="return confirm('¿Seguro que deseas eliminar esta cuenta?')">Eliminar</a>
+              <a class="btn-eliminar" href="{{ url_for('cuentas.eliminar_cuenta', id=cuenta.id) }}" onclick="return confirm('¿Seguro que deseas eliminar esta cuenta?')">Eliminar</a>
             </td>
           </tr>
           {% endfor %}
@@ -105,7 +105,7 @@
       <span class="cerrar" onclick="cerrarModal()">&times;</span>
       <h2>Editar Cuenta</h2>
       <!-- Aquí NO ponemos el id en url_for, solo la ruta base -->
-      <form method="POST" id="formEditarCuenta" action="{{ url_for('editar_cuenta', id=0) }}">
+      <form method="POST" id="formEditarCuenta" action="{{ url_for('cuentas.editar_cuenta', id=0) }}">
         <input type="hidden" name="id" id="modal-id" />
         
         <label for="modal-tipo">Tipo de Cuenta:</label>
@@ -153,7 +153,7 @@
     document.getElementById('modal-usuario').value = nombre_usuario;
 
     const form = document.getElementById('formEditarCuenta');
-    form.action = "{{ url_for('editar_cuenta', id=0) }}".replace('0', id);
+    form.action = "{{ url_for('cuentas.editar_cuenta', id=0) }}".replace('0', id);
   }
 
 
