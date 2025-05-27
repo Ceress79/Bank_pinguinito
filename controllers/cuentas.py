@@ -55,9 +55,9 @@ def crear_cuenta_bancaria():
 
     cur.execute("""
         INSERT INTO cuentas_bancarias 
-        (numero_cuenta, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """, (numero_cuenta, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario))
+        (numero_cuenta, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario, saldo)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """, (numero_cuenta, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario, 10))
     mysql.connection.commit()
     return redirect(url_for('cuentas.index'))
 

@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head><title>Facturas</title></head>
-<body>
+{% extends 'layout.html' %}
+{%block body%}
+<div class="container-facturas">
     <h2>Listado de Facturas</h2>
     <table border="1">
         <tr>
@@ -22,5 +21,5 @@
         {% endfor %}
     </table>
     <a href="/crear_factura">Crear nueva factura</a>
-</body>
-</html>
+</div>
+{%endblock%}

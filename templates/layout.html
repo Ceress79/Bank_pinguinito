@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BancoWeb - Inicio</title>
+
+  <!-- Font Awesome para iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}" />
+</head>
+<body>
+
+  <header>
+    <div class="menu-toggle" id="menuToggle" title="Abrir menú">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <div class="logo">Pingui Banks</div>
+
+    <div class="header-buttons">
+      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebarMenu">
+    <a href="/">Inicio</a>
+    <a href="#">Servicios</a>
+    <a href="#">Cuentas</a>
+    <a href="#">Transferencias</a>
+    <a href="/facturas">Facturas</a>
+  </nav>
+
+  <div class="overlay-menu" id="overlayMenu"></div>
+  {%block body%}
+  {%endblock%}
+
+  </main>
+
+
+    </div>
+  </div>
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebarMenu = document.getElementById('sidebarMenu');
+    const overlayMenu = document.getElementById('overlayMenu');
+
+    function toggleMenu() {
+      sidebarMenu.classList.toggle('active');
+      overlayMenu.classList.toggle('active');
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    overlayMenu.addEventListener('click', toggleMenu);
+  </script>
+
+</body>
+</html>

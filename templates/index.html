@@ -1,38 +1,5 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BancoWeb - Inicio</title>
-
-  <!-- Font Awesome para iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}" />
-</head>
-<body>
-
-  <header>
-    <div class="menu-toggle" id="menuToggle" title="Abrir menú">
-      <i class="fa-solid fa-bars"></i>
-    </div>
-
-    <div class="logo">Pingui Banks</div>
-
-    <div class="header-buttons">
-      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
-    </div>
-  </header>
-
-  <nav class="sidebar" id="sidebarMenu">
-    <a href="#">Inicio</a>
-    <a href="#">Servicios</a>
-    <a href="#">Cuentas</a>
-    <a href="#">Transferencias</a>
-    <a href="#">Contacto</a>
-  </nav>
-
-  <div class="overlay-menu" id="overlayMenu"></div>
+{% extends 'layout.html' %}
+{%block body%}
 
   <main class="cuentas-container">
     {% if user %}
@@ -78,7 +45,7 @@
             <td data-label="Apodo">{{ cuenta.apodo }}</td>
             <td data-label="Límite Retiro">{{ cuenta.limite_retiro }}</td>
             <td data-label="Retiros Día">{{ cuenta.max_retiros_diarios }}</td>
-            <td data-label="Usuario">{{ cuenta.nombre_usuario }}</td>
+            <td data-label="Usuario">{{ cuenta.id_usuario }}</td>
             <td data-label="Operaciones" class="acciones">
             <button 
               class="btn-editar" 
@@ -171,5 +138,4 @@
       document.getElementById('modalEditar').style.display = 'none';
     }
   </script>
-</body>
-</html>
+{%endblock%}
