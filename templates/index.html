@@ -47,7 +47,7 @@
         <input type="text" name="apodo" placeholder="Apodo de la cuenta" required>
         <input type="number" name="limite_retiro" placeholder="Dinero límite para retirar" required>
         <input type="number" name="max_retiros_diarios" placeholder="Número de retiros al día" required>
-        <input type="text" name="nombre_usuario" placeholder="Nombre del usuario" required>
+        <input type="text" name="id_usuario" placeholder="Cedula del usuario" required>
         <button type="submit">Crear Cuenta</button>
       </form>
     </div>
@@ -85,7 +85,7 @@
                 {{ cuenta.apodo|tojson }}, 
                 {{ cuenta.limite_retiro }}, 
                 {{ cuenta.max_retiros_diarios }}, 
-                {{ cuenta.nombre_usuario|tojson }}
+                {{ cuenta.id_usuario }}
               )'
             >Editar</button>
 
@@ -109,7 +109,7 @@
         <input type="hidden" name="id" id="modal-id" />
         
         <label for="modal-tipo">Tipo de Cuenta:</label>
-        <input type="text" name="tipo_cuenta" id="modal-tipo" required />
+        <input type="" name="tipo_cuenta" id="modal-tipo" required />
         
         <label for="modal-apodo">Apodo:</label>
         <input type="text" name="apodo" id="modal-apodo" required />
@@ -120,8 +120,8 @@
         <label for="modal-maxretiros">Máximo Retiros Diarios:</label>
         <input type="number" name="max_retiros_diarios" id="modal-maxretiros" required />
 
-        <label for="modal-usuario">Nombre Usuario:</label>
-        <input type="text" name="nombre_usuario" id="modal-usuario" required />
+        <label for="modal-usuario">Cedula Usuario:</label>
+        <input type="text" name="id_usuario" id="modal-usuario" required />
 
         <button type="submit">Guardar Cambios</button>
       </form>
@@ -142,7 +142,7 @@
     overlayMenu.addEventListener('click', toggleMenu);
 
     // Función para abrir modal y rellenar campos
-  function abrirModal(id, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, nombre_usuario) {
+  function abrirModal(id, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario) {
     console.log('abrirModal llamado con id:', id);
     document.getElementById('modalEditar').style.display = 'block';
     document.getElementById('modal-id').value = id;
@@ -150,7 +150,7 @@
     document.getElementById('modal-apodo').value = apodo;
     document.getElementById('modal-limite').value = limite_retiro;
     document.getElementById('modal-maxretiros').value = max_retiros_diarios;
-    document.getElementById('modal-usuario').value = nombre_usuario;
+    document.getElementById('modal-usuario').value = id_usuario;
 
     const form = document.getElementById('formEditarCuenta');
     form.action = "{{ url_for('cuentas.editar_cuenta', id=0) }}".replace('0', id);
