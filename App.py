@@ -3,6 +3,7 @@ from config import Config
 from extensions import mysql
 from controllers.auth import auth_bp
 from controllers.cuentas import cuentas_bp
+from controllers.factura import factura_bp
  
 def create_app():
     app = Flask(__name__)
@@ -12,6 +13,7 @@ def create_app():
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(cuentas_bp)
+    app.register_blueprint(factura_bp)
 
     return app
 
