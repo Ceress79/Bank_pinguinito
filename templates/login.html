@@ -51,7 +51,7 @@
 
 
             <div class="remember-forgot">
-                <a href="#" style="margin-left:58%;">¿Contraseña olvidada?</a>
+                <a href="#" onclick="abrirModalCorreo()" style="margin-left:58%;">¿Contraseña olvidada?</a>
             </div>
 
             <button type="submit" class="btn-login">Login</button>
@@ -62,6 +62,48 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal 1: Ingresar Correo -->
+<div id="modalCorreo" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modalCorreo')">&times;</span>
+    <h2>Recuperar Contraseña</h2>
+    <p>Ingresa tu correo para enviarte un código de verificación.</p>
+    <input type="email" id="correoRecuperacion" placeholder="Tu correo">
+    <button onclick="enviarCodigo()">Enviar Código</button>
+  </div>
+</div>
+
+<!-- Modal 2: Ingresar Código -->
+<div id="modalCodigo" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modalCodigo')">&times;</span>
+    <h2>Verifica tu Identidad</h2>
+    <p>Introduce el código de 6 dígitos que enviamos a tu correo.</p>
+    <div class="codigo-container">
+      <input type="text" maxlength="1" class="codigo" />
+      <input type="text" maxlength="1" class="codigo" />
+      <input type="text" maxlength="1" class="codigo" />
+      <input type="text" maxlength="1" class="codigo" />
+      <input type="text" maxlength="1" class="codigo" />
+      <input type="text" maxlength="1" class="codigo" />
+    </div>
+    <button onclick="verificarCodigo()">Continuar</button>
+  </div>
+</div>
+
+<!-- Modal 3: Nueva Contraseña -->
+<div id="modalNuevaClave" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modalNuevaClave')">&times;</span>
+    <h2>Nueva Contraseña</h2>
+    <input type="password" id="nuevaClave" placeholder="Nueva contraseña">
+    <input type="password" id="confirmarClave" placeholder="Confirmar contraseña">
+    <button onclick="guardarNuevaClave()">Guardar</button>
+  </div>
+</div>
+
+
   <script src="static/scripts/index.js"></script>
   <script>
     function closeAlert() {

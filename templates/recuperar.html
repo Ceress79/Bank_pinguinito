@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Recuperar Contraseña</title>
+</head>
+<body>
+    <h2>Recuperar Contraseña</h2>
+    <form method="POST">
+        <input type="email" name="email" placeholder="Ingresa tu correo" required>
+        <button type="submit">Enviar correo</button>
+    </form>
+    {% with messages = get_flashed_messages(category_filter=["usuario"]) %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</body>
+</html>
