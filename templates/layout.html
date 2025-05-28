@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BancoWeb - Inicio</title>
+
+  <!-- Font Awesome para iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}" />
+
+</head>
+<body>
+
+  <header>
+    <div class="menu-toggle" id="menuToggle" title="Abrir menú">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+    <div class="logo">Pingui Banks</div>
+    <div class="header-buttons">
+      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebarMenu">
+  <!-- Logo -->
+  <div class="sidebar-header">
+    <img src="{{ url_for('static', filename='img/logo_index.svg') }}" alt="Logo" class="logo-img" />
+    <div class="user-info">
+      <i class="fa-solid fa-user-secret"></i>
+      <span>{{ session['nombre_completo'].split()[0] }}</span>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Menú de navegación -->
+  <a href="/"><i class="fa-solid fa-house"></i> Inicio</a>
+  <a href="/ver_prestamos"><i class="fa-solid fa-hand-holding-dollar"></i> Préstamos</a>
+  <a href="/transferencias"><i class="fa-solid fa-right-left"></i> Transferencias</a>
+  <a href="/facturas"><i class="fa-solid fa-file-invoice"></i> Facturas</a>
+  <a href="/cuenta_bancaria"><i class="fa-solid fa-money-check-dollar"></i> Cuentas</a>
+</nav>
+
+
+
+  <div class="overlay-menu" id="overlayMenu"></div>
+
+  <main>
+    {% block body %}
+    {% endblock %}
+  </main>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebarMenu = document.getElementById('sidebarMenu');
+    const overlayMenu = document.getElementById('overlayMenu');
+
+    function toggleMenu() {
+      sidebarMenu.classList.toggle('active');
+      overlayMenu.classList.toggle('active');
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    overlayMenu.addEventListener('click', toggleMenu);
+  </script>
+
+</body>
+</html>

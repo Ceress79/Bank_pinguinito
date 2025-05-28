@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% block body %}
+<h2>Lista de Préstamos</h2>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Cantidad</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Límite</th>
+            <th>Cuotas</th>
+            <th>Garante</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for prestamo in prestamos %}
+        <tr>
+            <td>{{ prestamo.id }}</td>
+            <td>{{ prestamo.nombre_usuario }} ({{ prestamo.id_usuario }})</td>
+            <td>{{ prestamo.cantidad }}</td>
+            <td>{{ prestamo.fecha_inicio }}</td>
+            <td>{{ prestamo.fecha_limite }}</td>
+            <td>{{ prestamo.cuotas }}</td>
+            <td>{{ prestamo.garante }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7">No hay préstamos registrados.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('prestamos.crear_prestamo') }}">Crear nuevo préstamo</a>
+{% endblock %}

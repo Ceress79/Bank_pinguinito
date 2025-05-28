@@ -25,6 +25,7 @@ def login():
         if user:
             session['usuario'] = email
             session['nombre_completo'] = user[1]
+            session['id_usuario']=user[0]
             flash("Has iniciado sesión correctamente", "usuario")
             return redirect(url_for('cuentas.index'))
         else:
@@ -64,10 +65,10 @@ def add_contact():
 
         cur = mysql.connection.cursor()
         cur.execute('''INSERT INTO user (cedula, nombre_completo, correo, telefono, direccion, 
-            fecha_nacimiento, tipo_cuenta, confirmar_password, password) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)''',
+            fecha_nacimiento, tipo_cuenta, password) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)''',
             (cedula, nombre_completo, correo, telefono, direccion, fecha_formateada, tipo_cuenta,
-             confirmar_password, password))
+             password))
         mysql.connection.commit()
         cur.close()
 

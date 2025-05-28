@@ -1,0 +1,140 @@
+{% extends 'layout.html' %}
+{%block body%}
+
+  <main class="cuentas-container">
+
+    <!-- Formulario para crear nueva cuenta -->
+    <div class="form-crear-cuenta">
+      <h2>Crear nueva cuenta bancaria</h2>
+      <form action="{{ url_for('cuentas.crear_cuenta_bancaria') }}" method="POST">
+          <select class="" name="tipo_cuenta" required>
+            <option value="Ahorro">Ahorro</option>
+            <option value="Corriente">Corriente</option>
+          </select>
+        <input type="text" name="apodo" placeholder="Apodo de la cuenta" required>
+        <input type="number" name="limite_retiro" min="1" step="50" placeholder="Dinero límite para retirar" required>
+        <input type="number" name="max_retiros_diarios" min="1" placeholder="Número de retiros al día" required>
+        <input type="text" name="id_usuario" placeholder="Cedula del usuario" required>
+        <button type="submit">Crear Cuenta</button>
+      </form>
+    </div>
+
+    <!-- Tabla de cuentas bancarias -->
+    <div class="tabla-cuentas">
+      <h2>Cuentas bancarias creadas</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>N° Cuenta</th>
+            <th>Tipo</th>
+            <th>Apodo</th>
+            <th>Límite Retiro</th>
+            <th>Retiros Día</th>
+            <th>Usuario</th>
+            <th>Saldo</th>
+            <th>Operaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cuenta in cuentas %}
+          <tr>
+            <td data-label="N° Cuenta">{{ cuenta.numero_cuenta }}</td>
+            <td data-label="Tipo">{{ cuenta.tipo_cuenta }}</td>
+            <td data-label="Apodo">{{ cuenta.apodo }}</td>
+            <td data-label="Límite Retiro">{{ cuenta.limite_retiro }}</td>
+            <td data-label="Retiros Día">{{ cuenta.max_retiros_diarios }}</td>
+            <td data-label="Usuario">{{ cuenta.id_usuario }}</td>
+            <td data-label="Saldo">{{ cuenta.saldo }}</td>
+            <td data-label="Operaciones" class="acciones">
+            <button 
+              class="btn-editar" 
+              onclick='abrirModal(
+                {{ cuenta.id }}, 
+                {{ cuenta.tipo_cuenta|tojson }}, 
+                {{ cuenta.apodo|tojson }}, 
+                {{ cuenta.limite_retiro }}, 
+                {{ cuenta.max_retiros_diarios }}, 
+                {{ cuenta.id_usuario }}
+              )'
+            >Editar</button>
+
+
+              <a class="btn-eliminar" href="{{ url_for('cuentas.eliminar_cuenta', id=cuenta.id) }}" onclick="return confirm('¿Seguro que deseas eliminar esta cuenta?')">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Modal de edición -->
+  <div id="modalEditar" class="modal" style="display:none;">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModal()">&times;</span>
+      <h2>Editar Cuenta</h2>
+      <!-- Aquí NO ponemos el id en url_for, solo la ruta base -->
+      <form method="POST" id="formEditarCuenta" action="{{ url_for('cuentas.editar_cuenta', id=0) }}">
+        <input type="hidden" name="id" id="modal-id" />
+        
+
+        <!--<input type="" name="tipo_cuenta" id="modal-tipo" required /> -->
+        <div>
+          <label for="modal-tipo">Tipo de Cuenta:</label>
+          <select class="" name="tipo_cuenta" id="modal-tipo" required>
+            <option value="Ahorro">Ahorro</option>
+            <option value="Corriente">Corriente</option>
+          </select>
+        </div>
+
+        <label for="modal-apodo">Apodo:</label>
+        <input type="text" name="apodo" id="modal-apodo" required />
+
+        <label for="modal-limite">Límite de Retiro:</label>
+        <input type="number" min="1" step="50" name="limite_retiro" id="modal-limite" required />
+
+        <label for="modal-maxretiros">Máximo Retiros Diarios:</label>
+        <input type="number" min="1" name="max_retiros_diarios" id="modal-maxretiros" required />
+
+        <label for="modal-usuario">Cedula Usuario:</label>
+        <input type="text" name="id_usuario" id="modal-usuario" required />
+
+        <button type="submit">Guardar Cambios</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebarMenu = document.getElementById('sidebarMenu');
+    const overlayMenu = document.getElementById('overlayMenu');
+
+    function toggleMenu() {
+      sidebarMenu.classList.toggle('active');
+      overlayMenu.classList.toggle('active');
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    overlayMenu.addEventListener('click', toggleMenu);
+
+    // Función para abrir modal y rellenar campos
+  function abrirModal(id, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario) {
+    console.log('abrirModal llamado con id:', id);
+    document.getElementById('modalEditar').style.display = 'block';
+    document.getElementById('modal-id').value = id;
+    document.getElementById('modal-tipo').value = tipo_cuenta;
+    document.getElementById('modal-apodo').value = apodo;
+    document.getElementById('modal-limite').value = limite_retiro;
+    document.getElementById('modal-maxretiros').value = max_retiros_diarios;
+    document.getElementById('modal-usuario').value = id_usuario;
+
+    const form = document.getElementById('formEditarCuenta');
+    form.action = "{{ url_for('cuentas.editar_cuenta', id=0) }}".replace('0', id);
+  }
+
+
+    function cerrarModal() {
+      document.getElementById('modalEditar').style.display = 'none';
+    }
+  </script>
+{%endblock%}

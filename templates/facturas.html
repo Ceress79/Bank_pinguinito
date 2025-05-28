@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{%block body%}
+<div class="container-facturas">
+    <h2>Listado de Facturas</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>ID Usuario</th>
+            <th>Monto</th>
+            <th>Concepto</th>
+            <th>Fecha</th>
+        </tr>
+        {% for f in facturas %}
+        <tr>
+            <td>{{ f[0] }}</td>
+            <td>{{ f[1] }}</td>
+            <td>{{ f[2] }}</td>
+            <td>{{ f[3] }}</td>
+            <td>{{ f[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/crear_factura">Crear nueva factura</a>
+</div>
+{%endblock%}

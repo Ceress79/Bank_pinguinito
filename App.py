@@ -4,6 +4,10 @@ from extensions import mysql, mail
 from controllers.auth import auth_bp
 from controllers.cuentas import cuentas_bp
 
+from controllers.factura import factura_bp
+from controllers.transferencias import transferencias_bp
+from controllers.prestamos import prestamos_bp
+ 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -23,7 +27,9 @@ def create_app():
     # Registrar blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(cuentas_bp)
-
+    app.register_blueprint(factura_bp)
+    app.register_blueprint(transferencias_bp)
+    app.register_blueprint(prestamos_bp)
     return app
 
 if __name__ == '__main__':

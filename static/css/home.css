@@ -20,12 +20,13 @@ header {
   left: 0;
   width: 100%;
   height: 60px;
-  background: #520017;
-  color: white;
+  background: #bfeef3;
+  color: rgb(16, 15, 15);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+  margin-bottom: 10px;
   z-index: 1001;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -52,10 +53,11 @@ header {
 }
 
 .header-buttons a {
-  color: white;
+  color: rgb(255, 255, 255);
   text-decoration: none;
   font-weight: 500;
-  border: 2px solid white;
+  border: 2px solid rgb(23, 22, 22);
+  background-color: #131212;
   padding: 6px 14px;
   border-radius: 20px;
   transition: background-color 0.3s, color 0.3s;
@@ -63,7 +65,22 @@ header {
 
 .header-buttons a:hover {
   background-color: white;
-  color: #004085;
+  color: #328fbd;
+}
+
+.container-facturas{
+margin-top: 80px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+width:80%;
+margin: 60px auto 10px auto;
+}
+
+.container-crear-factura{
+margin: 120px auto auto auto;
+width: 80%;
 }
 
 /* MENÚ LATERAL */
@@ -73,8 +90,7 @@ nav.sidebar {
   left: -250px;
   width: 250px;
   height: 100vh;
-  background-color: #520017;
-  color: white;
+  background-color: #bfeef3;
   padding: 60px 20px 20px;
   transition: left 0.3s ease;
   z-index: 1000;
@@ -88,7 +104,7 @@ nav.sidebar.active {
 }
 
 nav.sidebar a {
-  color: white;
+  color: rgb(39, 38, 38);
   text-decoration: none;
   font-size: 1.1rem;
   padding: 10px 8px;
@@ -152,14 +168,35 @@ main.cuentas-container h1.bienvenida {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-crear-cuenta h2 {
+.form-crear-factura{
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-crear-factura div{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.form-crear-factura div a, .container-facturas a{
+  color: #800f5a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-crear-cuenta h2, .form-crear-factura h2 {
   margin-bottom: 15px;
   text-align: center;
   color: #520017;
 }
 
 .form-crear-cuenta input,
-.form-crear-cuenta button {
+.form-crear-cuenta button, .form-crear-cuenta select, .form-crear-factura input, .form-crear-factura button {
   width: 100%;
   margin-bottom: 10px;
   padding: 10px;
@@ -167,7 +204,7 @@ main.cuentas-container h1.bienvenida {
   border-radius: 5px;
 }
 
-.form-crear-cuenta button {
+.form-crear-cuenta button, .form-crear-factura button {
   background-color: #007bff;
   color: white;
   cursor: pointer;
@@ -200,7 +237,7 @@ main.cuentas-container h1.bienvenida {
   color: #520017;
 }
 
-.tabla-cuentas table {
+.tabla-cuentas table, .container-facturas table {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
@@ -211,19 +248,19 @@ main.cuentas-container h1.bienvenida {
 }
 
 .tabla-cuentas th,
-.tabla-cuentas td {
+.tabla-cuentas td, .container-facturas th, .container-facturas td {
   padding: 10px;
   text-align: center;
   border-bottom: 1px solid #ddd;
   word-break: break-word; /* para evitar overflow en celdas */
 }
 
-.tabla-cuentas th {
+.tabla-cuentas th, .container-facturas th {
   background-color: #6c0000;
   color: white;
 }
 
-.tabla-cuentas td {
+.tabla-cuentas td, .container-facturas td {
   background-color: #f9f9f9;
 }
 
@@ -238,11 +275,7 @@ main.cuentas-container h1.bienvenida {
 }
 
 /* Contenedor de botones dentro de la celda */
-.tabla-cuentas td.acciones {
-  display: flex;
-  justify-content: center; /* centra horizontalmente los botones */
-  gap: 5px; /* espacio entre botones */
-}
+
 
 /* BOTONES DE ACCIÓN */
 .btn-editar, .btn-eliminar {
@@ -305,4 +338,52 @@ main.cuentas-container h1.bienvenida {
 .tabla-cuentas table th:last-child,
 .tabla-cuentas table td.acciones {
   width: 190px; /* Puedes ajustar el valor */
+}
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.logo-img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  color: #333131;
+}
+.cuadro-cuenta-principal {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.cuadro-cuenta-principal h2 {
+  color: #6c0000;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.cuadro-cuenta-principal p {
+  font-size: 1.1rem;
+  margin: 8px 0;
+}
+
+.cuadro-cuenta-principal .saldo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0a5e28;
 }

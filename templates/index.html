@@ -1,132 +1,50 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BancoWeb - Inicio</title>
+{% extends 'layout.html' %}
+{%block body%}
 
-  <!-- Font Awesome para iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}" />
-</head>
-<body>
+<main class="cuentas-container" style="align-items: flex-start;">
 
-  <header>
-    <div class="menu-toggle" id="menuToggle" title="Abrir menú">
-      <i class="fa-solid fa-bars"></i>
+  {% if user %}
+    <div style="max-width: 400px; width: 100%;">
+      <h1 class="bienvenida" style="text-align: left; font-size: 1.8rem; margin-bottom: 10px;">
+        Hola {{ user.nombre_completo }}
+      </h1>
+      <p style="color: gray; font-size: 0.95rem; margin-bottom: 20px;">
+        ¡Descubre lo nuevo de tu banco congelado!
+      </p>
+
+      <h2 style="font-size: 1.3rem; color: #520017; margin-bottom: 15px;">
+        Mi resumen
+      </h2>
+
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+        <a href="#" class="btn-editar">Todos</a>
+        <a href="#" class="btn-editar">Cuentas</a>
+        <a href="#" class="btn-editar">Préstamos</a>
+        <a href="#" class="btn-editar">Transferencia</a>
+      </div>
+
+      {% if cuentas %}
+        <div class="cuadro-cuenta-principal">
+          <h2>Principal</h2>
+          <p><strong>{{ cuentas[0].tipo_cuenta | capitalize }}</strong> Nro {{ cuentas[0].numero_cuenta }}</p>
+          <p>
+            <span>Saldo disponible:</span><br>
+            <span class="saldo">$ {{ '%.2f' | format(cuentas[0].saldo) }}</span>
+          </p>
+        </div>
+      {% else %}
+        <div class="cuadro-cuenta-principal">
+          <h2>Sin cuentas</h2>
+          <p>No hay cuentas asociadas.</p>
+        </div>
+      {% endif %}
     </div>
+  {% endif %}
 
-    <div class="logo">Pingui Banks</div>
-
-    <div class="header-buttons">
-      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
-    </div>
-  </header>
-
-  <nav class="sidebar" id="sidebarMenu">
-    <a href="#">Inicio</a>
-    <a href="#">Servicios</a>
-    <a href="#">Cuentas</a>
-    <a href="#">Transferencias</a>
-    <a href="#">Contacto</a>
-  </nav>
-
-  <div class="overlay-menu" id="overlayMenu"></div>
-
-  <main class="cuentas-container">
-    {% if user %}
-      <h1 class="bienvenida">Bienvenido, {{ user.nombre_completo }}</h1>
-    {% endif %}
-
-    <!-- Formulario para crear nueva cuenta -->
-    <div class="form-crear-cuenta">
-      <h2>Crear nueva cuenta bancaria</h2>
-      <form action="{{ url_for('cuentas.crear_cuenta_bancaria') }}" method="POST">
-        <input type="text" name="tipo_cuenta" placeholder="Cuenta corriente o ahorro" required>
-        <input type="text" name="apodo" placeholder="Apodo de la cuenta" required>
-        <input type="number" name="limite_retiro" placeholder="Dinero límite para retirar" required>
-        <input type="number" name="max_retiros_diarios" placeholder="Número de retiros al día" required>
-        <input type="text" name="nombre_usuario" placeholder="Nombre del usuario" required>
-        <button type="submit">Crear Cuenta</button>
-      </form>
-    </div>
-
-    <!-- Tabla de cuentas bancarias -->
-    <div class="tabla-cuentas">
-      <h2>Cuentas bancarias creadas</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>N° Cuenta</th>
-            <th>Tipo</th>
-            <th>Apodo</th>
-            <th>Límite Retiro</th>
-            <th>Retiros Día</th>
-            <th>Usuario</th>
-            <th>Operaciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for cuenta in cuentas %}
-          <tr>
-            <td data-label="N° Cuenta">{{ cuenta.numero_cuenta }}</td>
-            <td data-label="Tipo">{{ cuenta.tipo_cuenta }}</td>
-            <td data-label="Apodo">{{ cuenta.apodo }}</td>
-            <td data-label="Límite Retiro">{{ cuenta.limite_retiro }}</td>
-            <td data-label="Retiros Día">{{ cuenta.max_retiros_diarios }}</td>
-            <td data-label="Usuario">{{ cuenta.nombre_usuario }}</td>
-            <td data-label="Operaciones" class="acciones">
-            <button 
-              class="btn-editar" 
-              onclick='abrirModal(
-                {{ cuenta.id }}, 
-                {{ cuenta.tipo_cuenta|tojson }}, 
-                {{ cuenta.apodo|tojson }}, 
-                {{ cuenta.limite_retiro }}, 
-                {{ cuenta.max_retiros_diarios }}, 
-                {{ cuenta.nombre_usuario|tojson }}
-              )'
-            >Editar</button>
+</main>
 
 
-              <a class="btn-eliminar" href="{{ url_for('cuentas.eliminar_cuenta', id=cuenta.id) }}" onclick="return confirm('¿Seguro que deseas eliminar esta cuenta?')">Eliminar</a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </main>
 
-  <!-- Modal de edición -->
-  <div id="modalEditar" class="modal" style="display:none;">
-    <div class="modal-contenido">
-      <span class="cerrar" onclick="cerrarModal()">&times;</span>
-      <h2>Editar Cuenta</h2>
-      <!-- Aquí NO ponemos el id en url_for, solo la ruta base -->
-      <form method="POST" id="formEditarCuenta" action="{{ url_for('cuentas.editar_cuenta', id=0) }}">
-        <input type="hidden" name="id" id="modal-id" />
-        
-        <label for="modal-tipo">Tipo de Cuenta:</label>
-        <input type="text" name="tipo_cuenta" id="modal-tipo" required />
-        
-        <label for="modal-apodo">Apodo:</label>
-        <input type="text" name="apodo" id="modal-apodo" required />
-
-        <label for="modal-limite">Límite de Retiro:</label>
-        <input type="number" name="limite_retiro" id="modal-limite" required />
-
-        <label for="modal-maxretiros">Máximo Retiros Diarios:</label>
-        <input type="number" name="max_retiros_diarios" id="modal-maxretiros" required />
-
-        <label for="modal-usuario">Nombre Usuario:</label>
-        <input type="text" name="nombre_usuario" id="modal-usuario" required />
-
-        <button type="submit">Guardar Cambios</button>
-      </form>
-    </div>
-  </div>
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
@@ -142,7 +60,7 @@
     overlayMenu.addEventListener('click', toggleMenu);
 
     // Función para abrir modal y rellenar campos
-  function abrirModal(id, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, nombre_usuario) {
+  function abrirModal(id, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario) {
     console.log('abrirModal llamado con id:', id);
     document.getElementById('modalEditar').style.display = 'block';
     document.getElementById('modal-id').value = id;
@@ -150,7 +68,7 @@
     document.getElementById('modal-apodo').value = apodo;
     document.getElementById('modal-limite').value = limite_retiro;
     document.getElementById('modal-maxretiros').value = max_retiros_diarios;
-    document.getElementById('modal-usuario').value = nombre_usuario;
+    document.getElementById('modal-usuario').value = id_usuario;
 
     const form = document.getElementById('formEditarCuenta');
     form.action = "{{ url_for('cuentas.editar_cuenta', id=0) }}".replace('0', id);
@@ -161,5 +79,4 @@
       document.getElementById('modalEditar').style.display = 'none';
     }
   </script>
-</body>
-</html>
+{%endblock%}

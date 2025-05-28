@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS user (
     direccion VARCHAR(255) NOT NULL,
     fecha_nacimiento DATE NOT NULL,
     tipo_cuenta SET('Corriente', 'Ahorro') NOT NULL,
-    confirmar_password VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 
@@ -23,6 +22,45 @@ CREATE TABLE IF NOT EXISTS cuentas_bancarias (
     apodo VARCHAR(100),
     limite_retiro DECIMAL(10,2),
     max_retiros_diarios INT,
-    nombre_usuario VARCHAR(100),
-    CONSTRAINT fk_nombre_usuario FOREIGN KEY (nombre_usuario) REFERENCES user(nombre_completo)
+    id_usuario INT,
+    saldo decimal(20,2),
+    CONSTRAINT fk_id_usuario FOREIGN KEY (id_usuario) REFERENCES user(cedula)
+);
+
+-- Tabla factura
+CREATE TABLE factura (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+    concepto VARCHAR(255) NOT NULL,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES user(cedula)
+);
+
+-- Tabla transferencia
+CREATE TABLE Transferencia (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    num_cuenta_origen VARCHAR(10),
+    num_cuenta_destino VARCHAR(10),
+    monto decimal(10,2),
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_cuenta_origen FOREIGN KEY (num_cuenta_origen) REFERENCES cuentas_bancarias(numero_cuenta),
+    CONSTRAINT fk_cuenta_destino FOREIGN KEY (num_cuenta_destino) REFERENCES cuentas_bancarias(numero_cuenta)
+);
+
+-- Tabla Prestamos
+CREATE TABLE prestamos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    cantidad DECIMAL(20,2) NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_limite_pago DATE NOT NULL,
+    cuotas INT NOT NULL,
+    garante VARCHAR(255),
+    tasa_interes DECIMAL(5,2) DEFAULT 0.00,
+    monto_pagado DECIMAL(20,2) DEFAULT 0.00,
+    estado ENUM('activo', 'pagado', 'mora') DEFAULT 'activo',
+    fecha_ultimo_pago DATE,
+    creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_prestamo_usuario FOREIGN KEY (id_usuario) REFERENCES user(cedula)
 );
