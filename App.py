@@ -5,6 +5,7 @@ from controllers.auth import auth_bp
 from controllers.cuentas import cuentas_bp
 from controllers.factura import factura_bp
 from controllers.transferencias import transferencias_bp
+from controllers.prestamos import prestamos_bp
  
 def create_app():
     app = Flask(__name__)
@@ -17,6 +18,7 @@ def create_app():
     app.register_blueprint(factura_bp)
     app.register_blueprint(transferencias_bp)
 
+    app.register_blueprint(prestamos_bp)
     return app
 
 if __name__ == '__main__':
