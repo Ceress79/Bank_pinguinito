@@ -34,6 +34,7 @@
             <th>Límite Retiro</th>
             <th>Retiros Día</th>
             <th>Usuario</th>
+            <th>Saldo</th>
             <th>Operaciones</th>
           </tr>
         </thead>
@@ -46,6 +47,7 @@
             <td data-label="Límite Retiro">{{ cuenta.limite_retiro }}</td>
             <td data-label="Retiros Día">{{ cuenta.max_retiros_diarios }}</td>
             <td data-label="Usuario">{{ cuenta.id_usuario }}</td>
+            <td data-label="Saldo">{{ cuenta.saldo }}</td>
             <td data-label="Operaciones" class="acciones">
             <button 
               class="btn-editar" 

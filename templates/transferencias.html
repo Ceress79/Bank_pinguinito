@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{%block body%}
+<div class="container-facturas">
+    <h2>Listado de Transferencias</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Cuenta Origen</th>
+            <th>Cuenta Destino</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+        </tr>
+        {% for t in transferencias %}
+        <tr>
+            <td>{{ t[0] }}</td>
+            <td>{{ t[1] }}</td>
+            <td>{{ t[2] }}</td>
+            <td>{{ t[3] }}</td>
+            <td>{{ t[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/crear_transferencia">Crear nueva transferencia</a>
+{%endblock%}

@@ -22,6 +22,7 @@ def login():
         if user:
             session['usuario'] = email
             session['nombre_completo'] = user[1]
+            session['id_usuario']=user[0]
             flash("Has iniciado sesión correctamente", "usuario")
             return redirect(url_for('cuentas.index'))
         else:

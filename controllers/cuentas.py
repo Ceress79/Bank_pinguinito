@@ -17,7 +17,7 @@ def index():
 
 def obtener_cuentas():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT id, numero_cuenta, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario FROM cuentas_bancarias")
+    cur.execute("SELECT id, numero_cuenta, tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario, saldo FROM cuentas_bancarias")
     resultados = cur.fetchall()
     cur.close()
 
@@ -30,7 +30,8 @@ def obtener_cuentas():
             'apodo': row[3],
             'limite_retiro': row[4],
             'max_retiros_diarios': row[5],
-            'id_usuario': row[6]
+            'id_usuario': row[6],
+            'saldo': row[7]
         })
     return cuentas
 

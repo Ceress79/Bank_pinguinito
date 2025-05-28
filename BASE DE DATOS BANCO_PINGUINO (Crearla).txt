@@ -43,6 +43,7 @@ CREATE TABLE Transferencia (
     num_cuenta_origen VARCHAR(10),
     num_cuenta_destino VARCHAR(10),
     monto decimal(10,2),
-    CONSTRAINT fk_cuenta_origen FOREIGN KEY (id_usuario) REFERENCES cuentas_bancarias(numero_cuenta)
-    CONSTRAINT fk_cuenta_destino FOREIGN KEY (id_usuario) REFERENCES cuentas_bancarias(numero_cuenta)
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_cuenta_origen FOREIGN KEY (num_cuenta_origen) REFERENCES cuentas_bancarias(numero_cuenta),
+    CONSTRAINT fk_cuenta_destino FOREIGN KEY (num_cuenta_destino) REFERENCES cuentas_bancarias(numero_cuenta)
 );
