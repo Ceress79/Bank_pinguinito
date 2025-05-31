@@ -15,6 +15,11 @@ def index():
     user = {'nombre_completo': session.get('nombre_completo')}
     return render_template('index.html', cuentas=cuentas, user=user)
 
+@cuentas_bp.route('/crear_cuenta')
+def crear_cuenta():
+    return render_template('crear_cuenta.html')
+
+
 @cuentas_bp.route('/cuenta_bancaria')
 def cuenta_bancaria():
     if 'usuario' not in session:
