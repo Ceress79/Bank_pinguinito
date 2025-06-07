@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{%block body%}
+{%if session['rol'] == 'a'%}
+<div class="container-facturas">
+    <h2>Listado de Depositos</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Cuenta Destino</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+        </tr>
+        {% for d in depositos %}
+        <tr>
+            <td>{{ d[0] }}</td>
+            <td>{{ d[1] }}</td>
+            <td>{{ d[2] }}</td>
+            <td>{{ d[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/crear_deposito">Crear nuevo deposito</a>
+  {%else %}
+     <div class="container-crear-factura">
+  <h2>Acceso denegado</h2>
+     </div>
+  {%endif%}
+{%endblock%}

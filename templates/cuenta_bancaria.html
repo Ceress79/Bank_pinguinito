@@ -12,9 +12,8 @@
             <option value="Corriente">Corriente</option>
           </select>
         <input type="text" name="apodo" placeholder="Apodo de la cuenta" required>
-        <input type="number" name="limite_retiro" min="1" step="50" placeholder="Dinero límite para retirar" required>
+        <input type="number" name="limite_retiro" min="1" placeholder="Dinero límite para retirar" required>
         <input type="number" name="max_retiros_diarios" min="1" placeholder="Número de retiros al día" required>
-        <input type="text" name="id_usuario" placeholder="Cedula del usuario" required>
         <button type="submit">Crear Cuenta</button>
       </form>
     </div>
@@ -91,13 +90,11 @@
         <input type="text" name="apodo" id="modal-apodo" required />
 
         <label for="modal-limite">Límite de Retiro:</label>
-        <input type="number" min="1" step="50" name="limite_retiro" id="modal-limite" required />
+        <input type="number" min="1" name="limite_retiro" id="modal-limite" required />
 
         <label for="modal-maxretiros">Máximo Retiros Diarios:</label>
         <input type="number" min="1" name="max_retiros_diarios" id="modal-maxretiros" required />
 
-        <label for="modal-usuario">Cedula Usuario:</label>
-        <input type="text" name="id_usuario" id="modal-usuario" required />
 
         <button type="submit">Guardar Cambios</button>
       </form>

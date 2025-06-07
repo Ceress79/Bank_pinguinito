@@ -12,6 +12,7 @@ def index():
         return redirect(url_for('auth.login'))
 
     cuentas = obtener_cuentas()
+    cuentas = [x for x in cuentas if x['id_usuario'] == session.get('id_usuario')]
     user = {'nombre_completo': session.get('nombre_completo')}
     return render_template('index.html', cuentas=cuentas, user=user)
 
@@ -28,6 +29,7 @@ def cuenta_bancaria():
 
     cuentas = obtener_cuentas()
     user = {'nombre_completo': session.get('nombre_completo')}
+    cuentas = [x for x in cuentas if x['id_usuario'] == session.get('id_usuario')]
     return render_template('cuenta_bancaria.html', cuentas=cuentas, user=user)
 
 
@@ -57,7 +59,7 @@ def crear_cuenta_bancaria():
     apodo = request.form['apodo']
     limite_retiro = request.form['limite_retiro']
     max_retiros_diarios = request.form['max_retiros_diarios']
-    id_usuario = request.form['id_usuario']
+    id_usuario = session['id_usuario']
 
     while True:
         numero_cuenta = '2206' + ''.join([str(random.randint(0, 9)) for _ in range(6)])
@@ -88,14 +90,13 @@ def editar_cuenta(id):
     apodo = request.form['apodo']
     limite_retiro = request.form['limite_retiro']
     max_retiros_diarios = request.form['max_retiros_diarios']
-    id_usuario = request.form['id_usuario']
 
     cur = mysql.connection.cursor()
     cur.execute("""
         UPDATE cuentas_bancarias
-        SET tipo_cuenta = %s, apodo = %s, limite_retiro = %s, max_retiros_diarios = %s, id_usuario = %s
+        SET tipo_cuenta = %s, apodo = %s, limite_retiro = %s, max_retiros_diarios = %s
         WHERE id = %s
-    """, (tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id_usuario, id))
+    """, (tipo_cuenta, apodo, limite_retiro, max_retiros_diarios, id))
     mysql.connection.commit()
     flash("Cuenta actualizada correctamente", "usuario")
     return redirect(url_for('cuentas.index'))

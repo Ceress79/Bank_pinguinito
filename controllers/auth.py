@@ -26,8 +26,12 @@ def login():
             session['usuario'] = email
             session['nombre_completo'] = user[1]
             session['id_usuario']=user[0]
+            session['rol']=user[6]
             flash("Has iniciado sesión correctamente", "usuario")
-            return redirect(url_for('cuentas.index'))
+            if session['rol']=='u':
+                return redirect(url_for('cuentas.index'))
+            else:
+                return redirect(url_for('depositos.lista_depositos'))
         else:
             flash("Correo o contraseña incorrectos", "usuario")
 
@@ -49,7 +53,7 @@ def add_contact():
         telefono = request.form['telefono']
         direccion = request.form['direccion']
         fecha_nacimiento = request.form['fecha_nacimiento']
-        tipo_cuenta = request.form['tipo_cuenta']
+        tipo_cuenta = 'u'
         confirmar_password = request.form['confirmar_password']
         password = request.form['password']
 
@@ -65,7 +69,7 @@ def add_contact():
 
         cur = mysql.connection.cursor()
         cur.execute('''INSERT INTO user (cedula, nombre_completo, correo, telefono, direccion, 
-            fecha_nacimiento, tipo_cuenta, password) 
+            fecha_nacimiento, rol, password) 
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)''',
             (cedula, nombre_completo, correo, telefono, direccion, fecha_formateada, tipo_cuenta,
              password))

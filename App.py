@@ -7,6 +7,7 @@ from controllers.cuentas import cuentas_bp
 from controllers.factura import factura_bp
 from controllers.transferencias import transferencias_bp
 from controllers.prestamos import prestamos_bp
+from controllers.depositos import depositos_bp
  
 def create_app():
     app = Flask(__name__)
@@ -15,7 +16,7 @@ def create_app():
     # Configuración manual si no está en Config (opcional)
     app.config['MYSQL_HOST'] = 'localhost'
     app.config['MYSQL_USER'] = 'root'
-    app.config['MYSQL_PASSWORD'] = '12345'
+    app.config['MYSQL_PASSWORD'] = ''
     app.config['MYSQL_DB'] = 'banco_pinguino'
 
     app.secret_key = 'mysecretkey'
@@ -30,6 +31,7 @@ def create_app():
     app.register_blueprint(factura_bp)
     app.register_blueprint(transferencias_bp)
     app.register_blueprint(prestamos_bp)
+    app.register_blueprint(depositos_bp)
     return app
 
 if __name__ == '__main__':

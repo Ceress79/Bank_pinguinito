@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS user (
     telefono VARCHAR(255) NOT NULL,
     direccion VARCHAR(255) NOT NULL,
     fecha_nacimiento DATE NOT NULL,
-    tipo_cuenta SET('Corriente', 'Ahorro') NOT NULL,
+    rol char,
     password VARCHAR(255) NOT NULL
 );
 
@@ -63,4 +63,13 @@ CREATE TABLE prestamos (
     fecha_ultimo_pago DATE,
     creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_prestamo_usuario FOREIGN KEY (id_usuario) REFERENCES user(cedula)
+);
+
+-- Tabla transferencia
+CREATE TABLE Deposito (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    num_cuenta_destino VARCHAR(10),
+    monto decimal(10,2),
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_cuenta_destino_deposito FOREIGN KEY (num_cuenta_destino) REFERENCES cuentas_bancarias(numero_cuenta)
 );

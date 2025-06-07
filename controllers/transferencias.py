@@ -14,16 +14,16 @@ def crear_transferencia():
         cursor.execute("Select saldo from cuentas_bancarias where numero_cuenta=%s", [cuenta_origen])
         saldo = float(cursor.fetchone()[0])
         cuenta = obtener_cuentas()
+        mis_cuentas = [x for x in cuenta if x['id_usuario'] == session.get('id_usuario')]
         numeros_cuenta = []
         for c in cuenta:
             numeros_cuenta.append(c['numero_cuenta'])
-        print(numeros_cuenta)
         if cuenta_destino not in numeros_cuenta:
             flash("Asegurese de que la cuenta de destino exista")
-            return render_template('crear_transferencia.html', cuentas = cuenta)
+            return render_template('crear_transferencia.html', cuentas = mis_cuentas)
         elif(saldo-monto <0):
             flash("Asegurese de que el monto no sea mayor que el saldo disponible de la cuenta")
-            return render_template('crear_transferencia.html', cuentas = cuenta)
+            return render_template('crear_transferencia.html', cuentas = mis_cuentas)
         cursor.execute("INSERT INTO transferencia (num_cuenta_origen, num_cuenta_destino, monto) VALUES (%s, %s, %s)", (cuenta_origen, cuenta_destino, monto))
         cursor.execute("UPDATE cuentas_bancarias set saldo=saldo-%s where numero_cuenta=%s",(monto, cuenta_origen))
         cursor.execute("UPDATE cuentas_bancarias set saldo=saldo+%s where numero_cuenta=%s",(monto, cuenta_destino))
@@ -31,7 +31,8 @@ def crear_transferencia():
         cursor.close()
         return redirect(url_for('transferencias.lista_transferencias'))
     cuenta = obtener_cuentas()
-    return render_template('crear_transferencia.html', cuentas = cuenta)
+    mis_cuentas = [x for x in cuenta if x['id_usuario'] == session.get('id_usuario')]
+    return render_template('crear_transferencia.html', cuentas = mis_cuentas)
 
 
 @transferencias_bp.route('/transferencias')
