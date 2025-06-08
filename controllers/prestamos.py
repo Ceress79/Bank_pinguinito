@@ -166,39 +166,49 @@ def aceptar_prestamo():
     conn = mysql.connection
     cursor = conn.cursor()
     try:
+        # Obtener usuario y cantidad del préstamo
         cursor.execute("SELECT id_usuario, cantidad FROM prestamos WHERE id = %s", (id_prestamo,))
         prestamo = cursor.fetchone()
         if prestamo:
             id_usuario, cantidad = prestamo
+
+            # Marcar préstamo como aceptado
             cursor.execute("UPDATE prestamos SET estatus_solicitud = 'aceptado' WHERE id = %s", (id_prestamo,))
 
+            # Buscar cuenta bancaria principal del usuario
             cursor.execute("""
-                SELECT numero_cuenta FROM cuentas_bancarias WHERE cedula_usuario = %s LIMIT 1
+                SELECT numero_cuenta FROM cuentas_bancarias WHERE id_usuario = %s LIMIT 1
             """, (id_usuario,))
             cuenta = cursor.fetchone()
 
             if cuenta:
                 numero_cuenta = cuenta[0]
+
+                # Registrar depósito
                 cursor.execute("""
                     INSERT INTO deposito (num_cuenta_destino, monto) VALUES (%s, %s)
                 """, (numero_cuenta, cantidad))
+
+                # Aumentar saldo
                 cursor.execute("""
                     UPDATE cuentas_bancarias SET saldo = saldo + %s WHERE numero_cuenta = %s
                 """, (cantidad, numero_cuenta))
+
                 conn.commit()
                 flash("Préstamo aceptado y depósito realizado", "success")
             else:
-                flash("Usuario no tiene cuenta bancaria registrada", "error")
                 conn.rollback()
+                flash("Usuario no tiene cuenta bancaria registrada", "error")
         else:
-            flash("Préstamo no encontrado", "error")
             conn.rollback()
+            flash("Préstamo no encontrado", "error")
     except Exception as e:
         conn.rollback()
         flash(f"Error: {str(e)}", "error")
     finally:
         cursor.close()
     return redirect(url_for('depositos.lista_depositos'))
+
 
 
 @prestamos_bp.route('/rechazar_prestamo/', methods=['POST'])
