@@ -1,35 +1,53 @@
 {% extends 'layout.html' %}
 {% block body %}
-<h2>Lista de Préstamos</h2>
 
-<table border="1" cellpadding="5" cellspacing="0">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prestamos.css') }}">
+
+<div class="container-facturas" >
+<h2 style="margin-top: 2rem; color: #800f5a;">Lista de Préstamos</h2>
+
+<table>
     <thead>
         <tr>
-            <th>ID</th>
             <th>Usuario</th>
             <th>Cantidad</th>
             <th>Fecha Inicio</th>
             <th>Fecha Límite</th>
             <th>Cuotas</th>
             <th>Garante</th>
+            <th>Motivo</th>
+            <th>Estatus Solicitud</th>
+            <th>Estado Pago</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         {% for prestamo in prestamos %}
         <tr>
-            <td>{{ prestamo.id }}</td>
             <td>{{ prestamo.nombre_usuario }} ({{ prestamo.id_usuario }})</td>
-            <td>{{ prestamo.cantidad }}</td>
+            <td>${{ '%.2f'|format(prestamo.cantidad) }}</td>
             <td>{{ prestamo.fecha_inicio }}</td>
             <td>{{ prestamo.fecha_limite }}</td>
             <td>{{ prestamo.cuotas }}</td>
             <td>{{ prestamo.garante }}</td>
+            <td>{{ prestamo.motivo }}</td>
+            <td class="{{ prestamo.estatus_solicitud }}">{{ prestamo.estatus_solicitud | capitalize }}</td>
+            <td class="{{ prestamo.estado }}">{{ prestamo.estado | capitalize }}</td>
+            <td>
+                {% if prestamo.estatus_solicitud == 'pendiente' and session.get('rol') == 'admin' %}
+                <form method="POST" action="{{ url_for('prestamos.aceptar_prestamo', id=prestamo.id) }}" style="display:inline;">
+                    <button type="submit" class="aceptar-btn">Aceptar</button>
+                </form>
+                {% else %}
+                -
+                {% endif %}
+            </td>
         </tr>
-        {% else %}
-        <tr><td colspan="7">No hay préstamos registrados.</td></tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
+<a href="{{ url_for('prestamos.crear_prestamo') }}" class="btn-centrado">Solicitar préstamo</a>
 
-<a href="{{ url_for('prestamos.crear_prestamo') }}">Crear nuevo préstamo</a>
+
 {% endblock %}

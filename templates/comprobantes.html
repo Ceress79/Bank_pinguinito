@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container-facturas">
+<h2>Historial de Movimientos</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Cuenta Origen + Nombre</th>
+            <th>Cuenta Destino + Nombre</th>
+            <th>Saldo Antes</th>
+            <th>Transferido</th>
+            <th>Saldo Después</th>
+            <th>Fecha</th>
+            <th>Mensaje</th>  <!-- Nueva columna -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in transferencias %}
+        <tr>
+            <td>{{ t.cuenta_origen }}<br>{{ t.nombre_origen }}</td>
+            <td>{{ t.cuenta_destino }}<br>{{ t.nombre_destino }}</td>
+            <td>${{ '%.2f' % t.saldo_antes }}</td>
+            <td style="color: {% if t.tipo == 'envio' %}red{% else %}green{% endif %};">
+                {{ '%.2f' % t.monto }}
+            </td>
+            <td>${{ '%.2f' % t.saldo_despues }}</td>
+            <td>{{ t.fecha }}</td>
+            <td>{{ t.mensaje or '' }}</td>  <!-- Mostrar mensaje, si no existe mostrar vacío -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

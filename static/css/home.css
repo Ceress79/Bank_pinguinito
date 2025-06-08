@@ -359,6 +359,7 @@ main.cuentas-container h1.bienvenida {
   font-weight: bold;
   color: #333131;
 }
+
 .cuadro-cuenta-principal {
   background-color: #fff;
   border-radius: 12px;
@@ -366,10 +367,12 @@ main.cuentas-container h1.bienvenida {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   max-width: 400px;
-  width: 100%;
-  margin: 0 auto;
+  /* quitar width: 100% */
+  width: 100%; /* o directamente eliminar esta línea */
   margin-top: 20px;
+  flex-shrink: 0; /* evita que los cuadros se encojan */
 }
+
 
 .cuadro-cuenta-principal h2 {
   color: #6c0000;

@@ -14,16 +14,19 @@
 <body>
 
   <header>
-    <div class="menu-toggle" id="menuToggle" title="Abrir menú">
+
+      <div class="menu-toggle" id="menuToggle" title="Abrir menú">
+    {% if session['rol'] != 'a' %}
       <i class="fa-solid fa-bars"></i>
+    {% endif %}
     </div>
     <div class="logo">Pingui Banks</div>
     <div class="header-buttons">
       <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
     </div>
   </header>
-
-  <nav class="sidebar" id="sidebarMenu">
+{% if session['rol'] != 'a' %}
+<nav class="sidebar" id="sidebarMenu">
   <!-- Logo -->
   <div class="sidebar-header">
     <img src="{{ url_for('static', filename='img/logo_index.svg') }}" alt="Logo" class="logo-img" />
@@ -39,10 +42,10 @@
   <a href="/"><i class="fa-solid fa-house"></i> Inicio</a>
   <a href="/ver_prestamos"><i class="fa-solid fa-hand-holding-dollar"></i> Préstamos</a>
   <a href="/transferencias"><i class="fa-solid fa-right-left"></i> Transferencias</a>
-  <a href="/facturas"><i class="fa-solid fa-file-invoice"></i> Facturas</a>
+  <a href="/comprobantes"><i class="fa-solid fa-file-invoice"></i> Historial</a>
   <a href="/cuenta_bancaria"><i class="fa-solid fa-money-check-dollar"></i> Cuentas</a>
 </nav>
-
+{% endif %}
 
 
   <div class="overlay-menu" id="overlayMenu"></div>

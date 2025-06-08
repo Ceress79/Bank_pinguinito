@@ -1,42 +1,40 @@
 {% extends 'layout.html' %}
 {% block body %}
-<h2>Crear Préstamo</h2>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul>
-      {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prestamos.css') }}">
 
-<form method="POST">
-    <label for="id_usuario">Usuario:</label><br>
-    <select name="id_usuario" id="id_usuario" required>
-        {% for usuario in usuarios %}
-        <option value="{{ usuario[0] }}">{{ usuario[1] }} ({{ usuario[0] }})</option>
+<h2>Solicitar Préstamo</h2>
+
+<form method="POST" action="{{ url_for('prestamos.crear_prestamo') }}">
+    <!-- Este campo es solo para seleccionar a qué admin le pides el préstamo -->
+    <label for="id_admin">Solicitar préstamo a:</label>
+    <select id="id_admin" name="id_admin" required>
+        <option value="">Seleccione un administrador</option>
+        {% for cedula, nombre, correo in admins %}
+        <option value="{{ cedula }}">{{ nombre }} ({{ cedula }})</option>
         {% endfor %}
-    </select><br><br>
+    </select>
 
-    <label for="cantidad">Cantidad de préstamo:</label><br>
-    <input type="number" step="0.01" name="cantidad" id="cantidad" required><br><br>
+    <!-- resto de campos -->
+    <label for="cantidad">Cantidad:</label>
+    <input type="number" step="0.01" id="cantidad" name="cantidad" required>
 
-    <label for="fecha_inicio">Fecha inicio (YYYY-MM-DD):</label><br>
-    <input type="date" name="fecha_inicio" id="fecha_inicio" required><br><br>
+    <label for="fecha_inicio">Fecha Inicio:</label>
+    <input type="date" id="fecha_inicio" name="fecha_inicio" required>
 
-    <label for="fecha_limite">Fecha límite a pagar (YYYY-MM-DD):</label><br>
-    <input type="date" name="fecha_limite" id="fecha_limite" required><br><br>
+    <label for="fecha_limite">Fecha Límite Pago:</label>
+    <input type="date" id="fecha_limite" name="fecha_limite" required>
 
-    <label for="cuotas">Número de cuotas:</label><br>
-    <input type="number" name="cuotas" id="cuotas" required><br><br>
+    <label for="cuotas">Número de Cuotas:</label>
+    <input type="number" id="cuotas" name="cuotas" min="1" required>
 
-    <label for="garante">Garante:</label><br>
-    <input type="text" name="garante" id="garante" required><br><br>
+    <label for="garante">Garante:</label>
+    <input type="text" id="garante" name="garante" required>
 
-    <button type="submit">Crear préstamo</button>
+    <label for="motivo">Motivo de la Solicitud:</label>
+    <textarea id="motivo" name="motivo" rows="4" required></textarea>
+
+    <button type="submit">Solicitar Préstamo</button>
 </form>
 
-<a href="{{ url_for('prestamos.listar_prestamos') }}">Volver a la lista de préstamos</a>
 {% endblock %}

@@ -1,41 +1,173 @@
 {% extends 'layout.html' %}
-{%block body%}
+{% block body %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transferencias.css') }}">
 <div class="container-crear-factura">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alerta">
-      {{ message }}
+    <!-- Alerta Toast -->
+    <div id="flash-alert" class="{% if messages %}show{% else %}hide{% endif %}">
+      <button class="close-btn" onclick="closeAlert()">×</button>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {{ messages[0] }}
+        {% endif %}
+      {% endwith %}
     </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+
     <div class="form-crear-factura">
         <h2>Crear Transferencia</h2>
-    <form method="POST">
-                <div>
-          <label for="cuenta_origen">Cuenta origen:</label><br>
-          <select class="" name="cuenta_origen" id="cuenta_origen" required>
-              {%for cuenta in cuentas%}
-              <option value="{{ cuenta.numero_cuenta }}">{{ cuenta.numero_cuenta }} - Saldo: {{ cuenta.saldo }} </option>
-              {%endfor%}
-          </select>
-        </div>
-                <label>Cuenta destino:</label><br>
-        <input type="text" name="cuenta_destino" required><br><br>
-        <label>Monto:</label><br>
-        <input type="number" name="monto" min="0" required><br><br>
+        <form method="POST" id="transferForm">
+            <label for="cuenta_origen">Cuenta origen:</label>
+            <select name="cuenta_origen" id="cuenta_origen" required onchange="habilitarCuentaDestino()">
+                <option value="" selected disabled>Selecciona una cuenta</option>
+                {% for cuenta in cuentas %}
+                <option value="{{ cuenta.numero_cuenta }}" data-saldo="{{ cuenta.saldo }}">
+                    {{ cuenta.numero_cuenta }} - Saldo: {{ cuenta.saldo }}
+                </option>
+                {% endfor %}
+            </select>
 
+            <label for="cuenta_destino">Cuenta destino:</label>
+            <div class="input-inline">
+              <input type="text" name="cuenta_destino" id="cuenta_destino" disabled required>
+              <button type="button" id="verificarBtn" disabled onclick="verificarCuenta()">Verificar cuenta</button>
+            </div>
 
+            <label for="nombre_beneficiario">Nombre del beneficiario:</label>
+            <input type="text" id="nombre_beneficiario" readonly>
 
-        <button type="submit">Crear</button>
-    </form>
+            <label for="cedula_beneficiario">Cédula del beneficiario:</label>
+            <input type="text" id="cedula_beneficiario" readonly>
+
+            <label for="correo_beneficiario">Correo electrónico:</label>
+            <input type="email" id="correo_beneficiario" readonly>
+
+            <label for="mensaje">Mensaje (opcional):</label>
+            <input type="text" name="mensaje" id="mensaje" disabled>
+
+            <label for="monto">Monto:</label>
+            <input type="number" name="monto" id="monto" min="0" step="0.01" disabled required>
+
+            <button type="submit" id="btnEnviar" disabled>Crear</button>
+        </form>
+
         <div>
-                <a href="/transferencias">Ver transferencias</a>
+            <a href="/transferencias">Ver transferencias</a>
         </div>
-
-        </div>
+    </div>
 </div>
+
 <script>
+  // Control de habilitación progresiva
+  function habilitarCuentaDestino() {
+    const cuentaOrigen = document.getElementById('cuenta_origen').value;
+    const cuentaDestinoInput = document.getElementById('cuenta_destino');
+    const verificarBtn = document.getElementById('verificarBtn');
+
+    if(cuentaOrigen) {
+      cuentaDestinoInput.disabled = false;
+      verificarBtn.disabled = false;
+    } else {
+      cuentaDestinoInput.value = '';
+      cuentaDestinoInput.disabled = true;
+      verificarBtn.disabled = true;
+      limpiarBeneficiario();
+      deshabilitarMensajeMonto();
+    }
+  }
+
+  // Limpia los campos beneficiario
+  function limpiarBeneficiario() {
+    document.getElementById('nombre_beneficiario').value = '';
+    document.getElementById('cedula_beneficiario').value = '';
+    document.getElementById('correo_beneficiario').value = '';
+  }
+
+  // Deshabilita mensaje y monto
+  function deshabilitarMensajeMonto() {
+    document.getElementById('mensaje').disabled = true;
+    document.getElementById('monto').disabled = true;
+    document.getElementById('btnEnviar').disabled = true;
+  }
+
+  // Habilita mensaje y monto
+  function habilitarMensajeMonto() {
+    document.getElementById('mensaje').disabled = false;  // aquí habilitamos el mensaje
+    document.getElementById('monto').disabled = false;
+    document.getElementById('btnEnviar').disabled = false;
+  }
+
+  // Verificar cuenta destino y llenar beneficiario
+  function verificarCuenta() {
+    const cuentaDestino = document.getElementById('cuenta_destino').value.trim();
+
+    if (!cuentaDestino) {
+      alertToast('Ingrese un número de cuenta destino válido.');
+      return;
+    }
+
+    fetch('/api/validar_cuenta', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ num_cuenta: cuentaDestino })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        alertToast('Asegúrese de que la cuenta de destino exista');
+        limpiarBeneficiario();
+        deshabilitarMensajeMonto();
+      } else {
+        document.getElementById('nombre_beneficiario').value = data.nombre;
+        document.getElementById('cedula_beneficiario').value = data.cedula;
+        document.getElementById('correo_beneficiario').value = data.correo;
+
+        habilitarMensajeMonto();  // habilitar mensaje y monto cuando la cuenta es válida
+      }
+    })
+    .catch(() => {
+      alertToast('Error al validar la cuenta destino');
+      limpiarBeneficiario();
+      deshabilitarMensajeMonto();
+    });
+  }
+
+  // Toast alert
+  function alertToast(msg) {
+    const alertBox = document.getElementById('flash-alert');
+    alertBox.textContent = msg;
+
+    // Añadimos el botón cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.classList.add('close-btn');
+    closeBtn.textContent = '×';
+    closeBtn.onclick = closeAlert;
+    alertBox.appendChild(closeBtn);
+
+    alertBox.classList.remove('hide');
+    alertBox.classList.add('show');
+
+    setTimeout(() => {
+      closeAlert();
+    }, 5000);
+  }
+
+  function closeAlert() {
+    const alert = document.getElementById('flash-alert');
+    alert.classList.remove('show');
+    alert.classList.add('hide');
+    // remover botón close para no acumular botones
+    const btn = alert.querySelector('button.close-btn');
+    if(btn) btn.remove();
+  }
+
+  // Cuando carga la página, por si hay mensaje flash de Flask
+  window.onload = function () {
+    const alert = document.getElementById('flash-alert');
+    if (alert && alert.classList.contains('show')) {
+      setTimeout(() => {
+        closeAlert();
+      }, 5000);
+    }
+  };
 </script>
-{%endblock%}
+{% endblock %}

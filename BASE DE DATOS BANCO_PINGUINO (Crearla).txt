@@ -43,6 +43,7 @@ CREATE TABLE Transferencia (
     num_cuenta_origen VARCHAR(10),
     num_cuenta_destino VARCHAR(10),
     monto decimal(10,2),
+    mensaje varchar(200) not null,
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_cuenta_origen FOREIGN KEY (num_cuenta_origen) REFERENCES cuentas_bancarias(numero_cuenta),
     CONSTRAINT fk_cuenta_destino FOREIGN KEY (num_cuenta_destino) REFERENCES cuentas_bancarias(numero_cuenta)
@@ -60,6 +61,8 @@ CREATE TABLE prestamos (
     tasa_interes DECIMAL(5,2) DEFAULT 0.00,
     monto_pagado DECIMAL(20,2) DEFAULT 0.00,
     estado ENUM('activo', 'pagado', 'mora') DEFAULT 'activo',
+    estatus_solicitud ENUM('pendiente', 'aceptado') DEFAULT 'pendiente',
+    motivo TEXT NULL,
     fecha_ultimo_pago DATE,
     creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_prestamo_usuario FOREIGN KEY (id_usuario) REFERENCES user(cedula)

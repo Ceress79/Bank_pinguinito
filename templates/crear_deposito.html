@@ -1,39 +1,127 @@
 {% extends 'layout.html' %}
-{%block body%}
-{%if session['rol'] == 'a'%}
+{% block body %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transferencias.css') }}">
 <div class="container-crear-factura">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alerta">
-      {{ message }}
+    <!-- Alerta Toast -->
+    <div id="flash-alert" class="{% if get_flashed_messages() %}show{% else %}hide{% endif %}">
+      <button class="close-btn" onclick="closeAlert()">×</button>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {{ messages[0] }}
+        {% endif %}
+      {% endwith %}
     </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+
     <div class="form-crear-factura">
-        <h2>Crear Transferencia</h2>
-    <form method="POST">
-        <label>Cuenta destino:</label><br>
-        <input type="text" name="cuenta_destino" required><br><br>
-        <label>Monto:</label><br>
-        <input type="number" name="monto" min="0" required><br><br>
+        <h2>Crear Depósito</h2>
+        <form method="POST" id="depositForm">
+            <label for="cuenta_destino">Cuenta destino:</label>
+            <input type="text" name="cuenta_destino" id="cuenta_destino" required oninput="limpiarBeneficiario()">
+            <button type="button" id="verificarBtn" onclick="verificarCuenta()">Verificar cuenta</button>
 
+            <label for="nombre_beneficiario">Nombre del beneficiario:</label>
+            <input type="text" id="nombre_beneficiario" readonly>
 
+            <label for="cedula_beneficiario">Cédula del beneficiario:</label>
+            <input type="text" id="cedula_beneficiario" readonly>
 
-        <button type="submit">Crear</button>
-    </form>
+            <label for="correo_beneficiario">Correo electrónico:</label>
+            <input type="email" id="correo_beneficiario" readonly>
+
+            <label for="monto">Monto:</label>
+            <input type="number" name="monto" id="monto" min="0" step="0.01" disabled required>
+
+            <button type="submit" id="btnEnviar" disabled>Crear</button>
+        </form>
+
         <div>
-                <a href="/depositos">Ver depositos</a>
+            <a href="/depositos">Ver depósitos</a>
         </div>
-
-        </div>
+    </div>
 </div>
-  {%else %}
- <div class="container-crear-factura">
-  <h2 >Acceso denegado</h2>
- </div>
-     {%endif%}
+
 <script>
+  // Limpia los campos beneficiario y deshabilita monto y botón
+  function limpiarBeneficiario() {
+    document.getElementById('nombre_beneficiario').value = '';
+    document.getElementById('cedula_beneficiario').value = '';
+    document.getElementById('correo_beneficiario').value = '';
+    document.getElementById('monto').disabled = true;
+    document.getElementById('btnEnviar').disabled = true;
+  }
+
+  // Verificar cuenta destino y llenar beneficiario
+  function verificarCuenta() {
+    const cuentaDestino = document.getElementById('cuenta_destino').value.trim();
+
+    if (!cuentaDestino) {
+      alertToast('Ingrese un número de cuenta destino válido.');
+      return;
+    }
+
+    fetch('/api/validar_cuenta', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ num_cuenta: cuentaDestino })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        alertToast('Asegúrese de que la cuenta de destino exista');
+        limpiarBeneficiario();
+      } else {
+        document.getElementById('nombre_beneficiario').value = data.nombre;
+        document.getElementById('cedula_beneficiario').value = data.cedula;
+        document.getElementById('correo_beneficiario').value = data.correo;
+
+        // habilitar monto y botón si cuenta válida
+        document.getElementById('monto').disabled = false;
+        document.getElementById('btnEnviar').disabled = false;
+      }
+    })
+    .catch(() => {
+      alertToast('Error al validar la cuenta destino');
+      limpiarBeneficiario();
+    });
+  }
+
+  // Toast alert
+  function alertToast(msg) {
+    const alertBox = document.getElementById('flash-alert');
+    alertBox.textContent = msg;
+
+    // Añadimos el botón cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.classList.add('close-btn');
+    closeBtn.textContent = '×';
+    closeBtn.onclick = closeAlert;
+    alertBox.appendChild(closeBtn);
+
+    alertBox.classList.remove('hide');
+    alertBox.classList.add('show');
+
+    setTimeout(() => {
+      closeAlert();
+    }, 5000);
+  }
+
+  function closeAlert() {
+    const alert = document.getElementById('flash-alert');
+    alert.classList.remove('show');
+    alert.classList.add('hide');
+    const btn = alert.querySelector('button.close-btn');
+    if(btn) btn.remove();
+  }
+
+  // Al cargar la página si hay mensaje flash, se oculta después de 5 segundos
+  window.onload = function () {
+    const alert = document.getElementById('flash-alert');
+    if (alert && alert.classList.contains('show')) {
+      setTimeout(() => {
+        closeAlert();
+      }, 5000);
+    }
+  };
 </script>
-{%endblock%}
+{% endblock %}

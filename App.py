@@ -4,7 +4,7 @@ from extensions import mysql, mail
 from controllers.auth import auth_bp
 from controllers.cuentas import cuentas_bp
 
-from controllers.factura import factura_bp
+from controllers.comprobantes import comprobantes_bp
 from controllers.transferencias import transferencias_bp
 from controllers.prestamos import prestamos_bp
 from controllers.depositos import depositos_bp
@@ -16,7 +16,7 @@ def create_app():
     # Configuración manual si no está en Config (opcional)
     app.config['MYSQL_HOST'] = 'localhost'
     app.config['MYSQL_USER'] = 'root'
-    app.config['MYSQL_PASSWORD'] = ''
+    app.config['MYSQL_PASSWORD'] = '12345'
     app.config['MYSQL_DB'] = 'banco_pinguino'
 
     app.secret_key = 'mysecretkey'
@@ -28,7 +28,7 @@ def create_app():
     # Registrar blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(cuentas_bp)
-    app.register_blueprint(factura_bp)
+    app.register_blueprint(comprobantes_bp)
     app.register_blueprint(transferencias_bp)
     app.register_blueprint(prestamos_bp)
     app.register_blueprint(depositos_bp)

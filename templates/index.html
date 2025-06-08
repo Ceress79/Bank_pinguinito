@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{%block body%}
+{% block body %}
 
 <main class="cuentas-container" style="align-items: flex-start;">
 
@@ -17,31 +17,36 @@
       </h2>
 
       <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-        <a href="#" class="btn-editar">Todos</a>
-        <a href="#" class="btn-editar">Cuentas</a>
-        <a href="#" class="btn-editar">Préstamos</a>
-        <a href="#" class="btn-editar">Transferencia</a>
+        <a href="/" class="btn-editar">Todos</a>
+        <a href="/cuenta_bancaria" class="btn-editar">Cuentas</a>
+        <a href="/ver_prestamos" class="btn-editar">Préstamos</a>
+        <a href="/transferencias" class="btn-editar">Transferencia</a>
       </div>
 
       {% if cuentas %}
-        <div class="cuadro-cuenta-principal">
-          <h2>Principal</h2>
-          <p><strong>{{ cuentas[0].tipo_cuenta | capitalize }}</strong> Nro {{ cuentas[0].numero_cuenta }}</p>
-          <p>
-            <span>Saldo disponible:</span><br>
-            <span class="saldo">$ {{ '%.2f' | format(cuentas[0].saldo) }}</span>
-          </p>
-        </div>
+      
+          {% for cuenta in cuentas %}
+            <div class="cuadro-cuenta-principal">
+              <h2>{{ cuenta.apodo or 'Principal' }}</h2>
+              <p><strong>{{ cuenta.tipo_cuenta | capitalize }}</strong> Nro {{ cuenta.numero_cuenta }}</p>
+              <p>
+                <span>Saldo disponible:</span><br>
+                <span class="saldo">$ {{ '%.2f' | format(cuenta.saldo) }}</span>
+              </p>
+            </div>
+          {% endfor %}
+     
       {% else %}
         <div class="cuadro-cuenta-principal">
-          <h2>Sin cuentas</h2>
-          <p>No hay cuentas asociadas.</p>
-        </div>
+            <h2>Sin cuentas</h2>
+            <p>No hay cuentas asociadas.</p>
+          </div>
       {% endif %}
     </div>
   {% endif %}
 
 </main>
+
 
 
 
