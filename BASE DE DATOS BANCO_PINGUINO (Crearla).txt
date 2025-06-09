@@ -61,7 +61,7 @@ CREATE TABLE prestamos (
     tasa_interes DECIMAL(5,2) DEFAULT 0.00,
     monto_pagado DECIMAL(20,2) DEFAULT 0.00,
     estado ENUM('activo', 'pagado', 'mora') DEFAULT 'activo',
-    estatus_solicitud ENUM('pendiente', 'aceptado') DEFAULT 'pendiente',
+    estatus_solicitud ENUM('pendiente', 'aceptado', 'rechazado') DEFAULT 'pendiente',
     motivo TEXT NULL,
     fecha_ultimo_pago DATE,
     creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
