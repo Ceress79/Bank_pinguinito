@@ -76,3 +76,7 @@ CREATE TABLE Deposito (
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_cuenta_destino_deposito FOREIGN KEY (num_cuenta_destino) REFERENCES cuentas_bancarias(numero_cuenta)
 );
+
+--Crear usuario administrador
+INSERT INTO USER VALUES( '1', 'admin', 'admin@gmail.com', '1', 'av', '2025-05-05', 'a', '12345');
+E-mail admin@gmail.com Contraseña 12345
