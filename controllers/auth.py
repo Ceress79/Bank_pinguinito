@@ -4,13 +4,17 @@ from flask_mail import Message
 from datetime import datetime
 import random
 import string
-
+import locale
 auth_bp = Blueprint('auth', __name__)
 
 # Diccionario temporal para almacenar códigos de recuperación (email: código)
 recovery_codes = {}
 
 # LOGIN
+
+# para mostrar la fecha en español
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')  # en Linux/mac, en Windows podría variar
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -25,10 +29,47 @@ def login():
         if user:
             session['usuario'] = email
             session['nombre_completo'] = user[1]
-            session['id_usuario']=user[0]
-            session['rol']=user[6]
+            session['id_usuario'] = user[0]
+            session['rol'] = user[6]
             flash("Has iniciado sesión correctamente", "usuario")
-            if session['rol']=='u':
+
+            # Obtener IP y fecha
+            ip_usuario = request.remote_addr or "IP no disponible"
+            ubicacion = "Ecuador"
+            fecha_actual = datetime.now()
+            fecha_formateada = fecha_actual.strftime('%A, %d de %B de %Y %H:%M')
+
+            # construir correo HTML
+            msg = Message(
+                subject='Ingreso a Banca Móvil',
+                sender='kateiutm@gmail.com',
+                recipients=[email]
+            )
+
+            msg.html = f"""
+            <html>
+              <body>
+                <p><strong>Fecha:</strong> {fecha_formateada}</p>
+                <h2>Ingreso a Banca Web</h2>
+                <p><strong>{user[1].upper()}</strong></p>
+                <p>Tu ingreso se realizó con éxito.</p>
+                <h3>Detalle</h3>
+                <table>
+                  <tr><td><strong>IP:</strong></td><td>{ip_usuario}</td></tr>
+                  <tr><td><strong>Ubicación:</strong></td><td>{ubicacion}</td></tr>
+                </table>
+                <p>Si no has solicitado este servicio, repórtalo a nuestra Banca Telefónica al <br>
+                <strong>0983878134</strong>.</p>
+                <p>Gracias por utilizar nuestros servicios.</p>
+                <p>Atentamente,<br>
+                Banco Pinguino</p>
+              </body>
+            </html>
+            """
+
+            mail.send(msg)
+
+            if session['rol'] == 'u':
                 return redirect(url_for('cuentas.index'))
             else:
                 return redirect(url_for('depositos.lista_depositos'))

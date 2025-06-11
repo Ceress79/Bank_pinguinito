@@ -1,7 +1,13 @@
 # controllers/cuentas.py
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session,  make_response
 from extensions import mysql
+import io
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from flask import render_template_string
 import random
+from datetime import datetime
+from xhtml2pdf import pisa
 
 cuentas_bp = Blueprint('cuentas', __name__)
 
@@ -100,3 +106,37 @@ def editar_cuenta(id):
     mysql.connection.commit()
     flash("Cuenta actualizada correctamente", "usuario")
     return redirect(url_for('cuentas.index'))
+
+
+
+
+
+@cuentas_bp.route('/descargar_certificado')
+def descargar_certificado():
+    if 'usuario' not in session:
+        flash("Debes iniciar sesión primero", "usuario")
+        return redirect(url_for('auth.login'))
+
+    cuentas = obtener_cuentas()
+    cuentas_usuario = [c for c in cuentas if c['id_usuario'] == session.get('id_usuario')]
+
+    usuario = {
+        "nombre_completo": session.get("nombre_completo"),
+        "cedula": session.get("id_usuario"),
+    }
+
+    fecha = datetime.now().strftime("%d/%m/%Y")
+    html_content = render_template("certificado.html", usuario=usuario, cuentas=cuentas_usuario, fecha=fecha)
+
+    pdf_buffer = io.BytesIO()
+    pisa_status = pisa.CreatePDF(io.StringIO(html_content), dest=pdf_buffer)
+
+    if pisa_status.err:
+        return "Error al generar PDF", 500
+
+    pdf_buffer.seek(0)
+    response = make_response(pdf_buffer.read())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=certificado_cuentas.pdf'
+
+    return response

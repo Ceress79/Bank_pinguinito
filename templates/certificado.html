@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificado de Relaciones Comerciales</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px; /* un poco más pequeño para que quepa mejor */
+        margin: 20px;
+    }
+    .titulo {
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+    .info {
+        margin-bottom: 10px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+        table-layout: fixed; /* fija anchos */
+        word-wrap: break-word; /* permite romper palabras largas */
+    }
+    th, td {
+        border: 1px solid #333;
+        padding: 6px 4px;
+        text-align: left;
+        vertical-align: middle;
+        overflow: hidden;
+        white-space: nowrap; /* evitar que se parta texto en varias líneas si no quieres */
+        text-overflow: ellipsis; /* poner "..." si es muy largo */
+    }
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    /* Aquí defines anchos fijos para columnas, ajusta según necesites */
+    th:nth-child(1), td:nth-child(1) { width: 12%; } /* No. Cuenta */
+    th:nth-child(2), td:nth-child(2) { width: 14%; } /* Tipo de Cuenta */
+    th:nth-child(3), td:nth-child(3) { width: 8%; }  /* Estado */
+    th:nth-child(4), td:nth-child(4) { width: 15%; } /* Promedio Semestre */
+    th:nth-child(5), td:nth-child(5) { width: 8%; }  /* Moneda */
+    th:nth-child(6), td:nth-child(6) { width: 15%; } /* Fecha Apertura */
+    th:nth-child(7), td:nth-child(7) { width: 14%; } /* Relación */
+    th:nth-child(8), td:nth-child(8) { width: 14%; } /* No. Protesto */
+
+    .footer {
+        text-align: center;
+        margin-top: 50px;
+        font-style: italic;
+    }
+</style>
+</head>
+<body>
+
+    <div class="titulo">
+        CERTIFICADO DE RELACIONES COMERCIALES
+    </div>
+
+    <div class="info">
+        <p style="margin: 0;">Portoviejo, {{ fecha }}</p>
+        <p style="margin: 0;">Sr.(a): <strong>{{ usuario.nombre_completo }}</strong></p>
+        <p style="margin: 0;">Presente.-</p>
+    </div>
+
+    <p style="text-align: justify; margin-top: 30px;">
+        Tenemos a bien informar que el(la) Sr.(a) <strong>{{ usuario.nombre_completo }}</strong>, portador(a) del Documento de Identificación No. <strong>{{ usuario.cedula or 'No registrado' }}</strong>, es cliente de esta institución y mantiene las siguientes relaciones comerciales con el Banco Pinguino C.A.:
+    </p>
+
+    <p style="text-align: left; font-weight: bold; margin-top: 30px;">Cuentas:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>No. Cuenta</th>
+                <th>Tipo de Cuenta</th>
+                <th>Estado</th>
+                <th>Promedio Semestre</th>
+                <th>Moneda</th>
+                <th>Fecha Apertura</th>
+                <th>Relación</th>
+                <th>No. Protesto</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cuenta in cuentas %}
+            <tr>
+                <td>{{ cuenta.numero_cuenta }}</td>
+                <td>{{ cuenta.tipo_cuenta }}</td>
+                <td>ACTIVO</td>
+                <td>2 CiFRA(S)</td>
+                <td>USD</td>
+                <td>{{ fecha }}</td>
+                <td>Propietario</td>
+                <td>0</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="footer">Página 1 de 1</p>
+
+</body>
+</html>

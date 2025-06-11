@@ -21,6 +21,7 @@
         <a href="/cuenta_bancaria" class="btn-editar">Cuentas</a>
         <a href="/ver_prestamos" class="btn-editar">Préstamos</a>
         <a href="/transferencias" class="btn-editar">Transferencia</a>
+        <a href="{{ url_for('cuentas.descargar_certificado') }}" class="btn-editar">Descargar Certificado Bancario</a>
       </div>
 
       {% if cuentas %}
